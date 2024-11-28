@@ -90,7 +90,7 @@
     }
 
     #message h1 {
-      font-size: calc(10px + 5vw);
+      font-size: calc(12px + 6vw);
       color: #f72424;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
       font-family: 'birthday balon tfb', sans-serif;
@@ -98,7 +98,7 @@
     }
 
     #message p {
-      font-size: calc(8px + 2vw);
+      font-size: calc(9px + 3vw);
       font-weight: bold;
       color: #333;
       font-family: 'Dancing Script', cursive;
@@ -171,7 +171,7 @@
     const birthdayAudio = document.getElementById('birthdayAudio');
     const playMusicBtn = document.getElementById('playMusicBtn');
 
-    const target = new Date('2024-11-30T00:00:00');
+    const target = new Date('2024-11-28T23:41:00');
     const isCountdownComplete = localStorage.getItem('countdownComplete') === 'true';
 
     // Position "Play Music" button in the top-right corner
@@ -238,7 +238,7 @@
     }
 
     function getRandomStyles() {
-      const colors = ["#FF69B4", "#FFB6C1", "#DDA0DD", "#FF7F50", "#FF1493", "#FF6347"];
+      const colors = ["#FF69B4", "#FFB6C1", "#DDA0DD","#800000", "#fa0202", "#FF1493", "#000000","#016320"];
       const color = colors[random(colors.length)];
       const ml = random(window.innerWidth - 100);
       const dur = random(5) + 10;
