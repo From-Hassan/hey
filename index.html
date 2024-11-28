@@ -145,7 +145,6 @@
   <div id="curtain">
     <h2 id="curtainText">Secret Revealed Soon!</h2>
     <div id="countdown">00:00:00</div>
-    <button id="playMusicBtn" style="display: none; margin-top: 20px; padding: 10px 20px; font-size: 1.2rem;">Play Music</button>
   </div>
 
   <div id="message">
@@ -155,6 +154,10 @@
 
   <div id="balloon-container"></div>
 
+  <!-- Music Play Button -->
+  <button id="playMusicBtn" style="display: none;">🎵 Play Music</button>
+
+  <!-- Audio element to play Happy Birthday song -->
   <audio id="birthdayAudio" preload="auto">
     <source src="https://raw.githubusercontent.com/From-Hassan/hey/main/happy-birthday.mp3" type="audio/mp3">
     Your browser does not support the audio element.
@@ -168,8 +171,20 @@
     const birthdayAudio = document.getElementById('birthdayAudio');
     const playMusicBtn = document.getElementById('playMusicBtn');
 
-    const target = new Date('2024-11-28T23:31:00');
+    const target = new Date('2024-11-28T23:35:00');
     const isCountdownComplete = localStorage.getItem('countdownComplete') === 'true';
+
+    // Position "Play Music" button in the top-right corner
+    playMusicBtn.style.position = "fixed";
+    playMusicBtn.style.top = "20px";
+    playMusicBtn.style.right = "20px";
+    playMusicBtn.style.padding = "10px 20px";
+    playMusicBtn.style.fontSize = "1rem";
+    playMusicBtn.style.backgroundColor = "#f72424";
+    playMusicBtn.style.color = "#fff";
+    playMusicBtn.style.border = "none";
+    playMusicBtn.style.cursor = "pointer";
+    playMusicBtn.style.borderRadius = "5px";
 
     if (isCountdownComplete) {
       startCelebration();
@@ -246,4 +261,5 @@
     });
   </script>
 </body>
+
 </html>
