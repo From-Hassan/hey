@@ -145,6 +145,7 @@
   <div id="curtain">
     <h2 id="curtainText">Secret Revealed Soon!</h2>
     <div id="countdown">00:00:00</div>
+    <button id="playMusicBtn" style="display: none; margin-top: 20px; padding: 10px 20px; font-size: 1.2rem;">Play Music</button>
   </div>
 
   <div id="message">
@@ -165,8 +166,9 @@
     const countdownElement = document.getElementById('countdown');
     const balloonContainer = document.getElementById('balloon-container');
     const birthdayAudio = document.getElementById('birthdayAudio');
+    const playMusicBtn = document.getElementById('playMusicBtn');
 
-    const target = new Date('2024-11-28T23:22:00');
+    const target = new Date('2024-11-28T23:31:00');
     const isCountdownComplete = localStorage.getItem('countdownComplete') === 'true';
 
     if (isCountdownComplete) {
@@ -201,9 +203,20 @@
       curtainText.style.display = 'none';
       countdownElement.style.display = 'none';
       balloonContainer.style.display = 'block';
-      birthdayAudio.play();
+      tryToPlayMusic();
       createBalloons(40);
     }
+
+    function tryToPlayMusic() {
+      birthdayAudio.play().catch(() => {
+        playMusicBtn.style.display = 'block';
+      });
+    }
+
+    playMusicBtn.addEventListener('click', () => {
+      birthdayAudio.play();
+      playMusicBtn.style.display = 'none';
+    });
 
     function random(num) {
       return Math.floor(Math.random() * num);
@@ -228,7 +241,7 @@
 
     window.addEventListener('load', () => {
       if (isCountdownComplete) {
-        birthdayAudio.play();
+        tryToPlayMusic();
       }
     });
   </script>
