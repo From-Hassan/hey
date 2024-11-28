@@ -11,7 +11,7 @@
   <style>
     body {
       margin: 0;
-      background: #E6E6FA; /* Calm solid background color */
+      background: #E6E6FA;
       font-family: Arial, sans-serif;
       overflow: hidden;
       display: flex;
@@ -33,7 +33,7 @@
       left: 0;
       width: 100%;
       z-index: 0;
-      display: none; /* Initially hide balloons */
+      display: none; /* Initially hidden */
     }
 
     .balloon {
@@ -84,37 +84,36 @@
       position: relative;
       z-index: 1;
       text-align: center;
-      padding: 0 20%; /* Adds space to the left and right */
-      margin-top: 5%; /* Adds space at the top */
+      padding: 0 10%;
+      margin-top: 5%;
       box-sizing: border-box;
     }
 
     #message h1 {
-      font-size: 6rem;
+      font-size: calc(10px + 5vw);
       color: #f72424;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-      font-family: 'birthday balon tfb', sans-serif; /* Bold font for Happy Birthday */
+      font-family: 'birthday balon tfb', sans-serif;
       margin: 0;
     }
 
     #message p {
-      font-size: 4vw;
-      font-weight: bold; /* Make the wish bold */
+      font-size: calc(8px + 2vw);
+      font-weight: bold;
       color: #333;
-      font-family: 'Dancing Script', cursive; /* Handwriting font for the wish */
+      font-family: 'Dancing Script', cursive;
       margin-top: 10px;
     }
 
-    /* Curtain style */
     #curtain {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 1); /* Full black curtain */
+      background: rgba(0, 0, 0, 1);
       z-index: 10;
-      transition: top 3s ease-in-out, height 3s ease-in-out; /* Slow slide transition */
+      transition: top 3s ease-in-out, height 3s ease-in-out;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -124,8 +123,8 @@
     }
 
     #curtain.open {
-      top: 100%;  /* Slide the curtain down completely */
-      height: 100%; /* Make the curtain completely disappear */
+      top: 100%;
+      height: 100%;
     }
 
     #curtain h2 {
@@ -135,64 +134,91 @@
       margin-top: 20px;
     }
 
-    /* Countdown Timer */
     #countdown {
       color: white;
       font-size: 2rem;
       margin-top: 10px;
     }
-
   </style>
 </head>
 <body>
-  <!-- Curtain for reveal -->
   <div id="curtain">
     <h2 id="curtainText">Secret Revealed Soon!</h2>
     <div id="countdown">00:00:00</div>
   </div>
 
-  <!-- Birthday Message -->
   <div id="message">
     <h1>Happy Birthday Arin!</h1>
-    <p> My best wishes will be with you simultaneously.🥳</p>
+    <p>Wishing you all the happiness in the world! 🎉</p>
   </div>
 
   <div id="balloon-container"></div>
 
-  <!-- Audio element to play Happy Birthday song -->
- <audio id="birthdayAudio" preload="auto">
+  <audio id="birthdayAudio" preload="auto">
     <source src="https://raw.githubusercontent.com/From-Hassan/hey/main/happy-birthday.mp3" type="audio/mp3">
     Your browser does not support the audio element.
   </audio>
 
-
-
   <script>
     const curtain = document.getElementById('curtain');
-    const curtainText = document.getElementById('curtainText'); // Get the curtain text
+    const curtainText = document.getElementById('curtainText');
     const countdownElement = document.getElementById('countdown');
     const balloonContainer = document.getElementById('balloon-container');
     const birthdayAudio = document.getElementById('birthdayAudio');
 
-    // Set the target date and time (November 29, 2024, 00:00 AM)
     const target = new Date('2024-11-28T23:10:00');
+    const isCountdownComplete = localStorage.getItem('countdownComplete') === 'true';
+
+    if (isCountdownComplete) {
+      startCelebration();
+    } else {
+      startCountdown();
+    }
+
+    function startCountdown() {
+      function updateCountdown() {
+        const now = new Date();
+        const difference = target - now;
+
+        if (difference <= 0) {
+          localStorage.setItem('countdownComplete', 'true');
+          startCelebration();
+          clearInterval(countdownInterval);
+        } else {
+          const hours = String(Math.floor(difference / (1000 * 60 * 60))).padStart(2, "0");
+          const minutes = String(Math.floor((difference / (1000 * 60)) % 60)).padStart(2, "0");
+          const seconds = String(Math.floor((difference / 1000) % 60)).padStart(2, "0");
+          countdownElement.textContent = `${hours}:${minutes}:${seconds}`;
+        }
+      }
+
+      const countdownInterval = setInterval(updateCountdown, 1000);
+      updateCountdown();
+    }
+
+    function startCelebration() {
+      curtain.classList.add("open");
+      curtainText.style.display = 'none';
+      countdownElement.style.display = 'none';
+      balloonContainer.style.display = 'block';
+      birthdayAudio.play();
+      createBalloons(40);
+    }
 
     function random(num) {
       return Math.floor(Math.random() * num);
     }
 
     function getRandomStyles() {
-      const colors = [
-        "#FF69B4", "#FFB6C1", "#DDA0DD", "#FF7F50", "#FF1493", "#FF6347"
-      ];
+      const colors = ["#FF69B4", "#FFB6C1", "#DDA0DD", "#FF7F50", "#FF1493", "#FF6347"];
       const color = colors[random(colors.length)];
-      const ml = random(window.innerWidth - 100); // Random horizontal position
-      const dur = random(5) + 10; // Duration 10-15s
-      return `background-color: ${color}; color: rgba(255, 255, 255, 0.8); margin: 0 0 0 ${ml}px; animation-duration: ${dur}s;`;
+      const ml = random(window.innerWidth - 100);
+      const dur = random(5) + 10;
+      return `background-color: ${color}; margin-left: ${ml}px; animation-duration: ${dur}s;`;
     }
 
     function createBalloons(num) {
-      for (let i = num; i > 0; i--) {
+      for (let i = 0; i < num; i++) {
         const balloon = document.createElement("div");
         balloon.className = "balloon";
         balloon.style.cssText = getRandomStyles();
@@ -200,36 +226,11 @@
       }
     }
 
-    // Countdown logic
-    function updateCountdown() {
-      const now = new Date();
-      const difference = target - now;
-
-      if (difference <= 0) {
-        // Reveal the content and play music
-        curtain.classList.add("open");
-        curtainText.style.display = 'none'; // Hide the curtain text
-        countdownElement.style.display = 'none'; // Hide countdown
-        balloonContainer.style.display = 'block'; // Show balloons
-        birthdayAudio.play(); // Play the audio when the curtain opens
-        createBalloons(40); // Start the floating balloons after curtain opens
-        clearInterval(countdownInterval);
-      } else {
-        // Update the countdown
-        const hours = String(Math.floor(difference / (1000 * 60 * 60))).padStart(2, "0");
-        const minutes = String(Math.floor((difference / (1000 * 60)) % 60)).padStart(2, "0");
-        const seconds = String(Math.floor((difference / 1000) % 60)).padStart(2, "0");
-        countdownElement.textContent = `${hours}:${minutes}:${seconds}`;
+    window.addEventListener('load', () => {
+      if (isCountdownComplete) {
+        birthdayAudio.play();
       }
-    }
-
-    // Create balloons when the page loads
-    window.addEventListener("load", () => {
-      updateCountdown(); // Initial countdown update
     });
-
-    // Update the countdown every second
-    const countdownInterval = setInterval(updateCountdown, 1000);
   </script>
 </body>
 </html>
